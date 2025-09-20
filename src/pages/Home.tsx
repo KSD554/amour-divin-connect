@@ -2,9 +2,16 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Heart, Users, Target, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import heroImage from "@/assets/hero-amour-divin.jpg";
+import DonationModal from "@/components/DonationModal";
 
 const Home = () => {
+  const [isDonationModalOpen, setIsDonationModalOpen] = useState(false);
+
+  const openDonationModal = () => setIsDonationModalOpen(true);
+  const closeDonationModal = () => setIsDonationModalOpen(false);
+
   return (
     <div className="min-h-screen">
       {/* Section Hero */}
@@ -30,6 +37,7 @@ const Home = () => {
                   size="lg" 
                   variant="outline" 
                   className="border-white/80 text-white bg-white/10 hover:bg-white hover:text-primary backdrop-blur-sm"
+                  onClick={openDonationModal}
                 >
                   Faire un don
                 </Button>
@@ -142,6 +150,7 @@ const Home = () => {
             <Button 
               size="lg" 
               className="hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth"
+              onClick={openDonationModal}
             >
               Faire un don maintenant
             </Button>
@@ -157,6 +166,11 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      <DonationModal 
+        isOpen={isDonationModalOpen} 
+        onClose={closeDonationModal} 
+      />
     </div>
   );
 };
