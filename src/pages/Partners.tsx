@@ -1,8 +1,34 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Building, Users, Heart, Handshake, Globe, Shield } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import DonationModal from "@/components/DonationModal";
 
 const Partners = () => {
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handleContactPartnership = () => {
+    toast({
+      title: "Contact Partenariat",
+      description: "Merci pour votre intérêt ! Contactez-nous à conctactongamdi@gmail.com ou au 08 37 52 99 pour discuter d'un partenariat.",
+    });
+  };
+
+  const handleEnterprisePartnership = () => {
+    toast({
+      title: "Partenariat Entreprise",
+      description: "Contactez-nous à conctactongamdi@gmail.com pour explorer les opportunités de partenariat entreprise.",
+    });
+  };
+
+  const handleInstitutionalPartnership = () => {
+    toast({
+      title: "Partenariat Institutionnel", 
+      description: "Écrivez-nous à conctactongamdi@gmail.com pour une collaboration institutionnelle.",
+    });
+  };
   const partenaires = [
     {
       nom: "L'entreprise Abouake.net",
@@ -198,7 +224,10 @@ const Partners = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     Responsabilité sociale, visibilité positive, déductions fiscales
                   </p>
-                  <Button variant="outline" className="w-full">
+                  <Button 
+                    onClick={handleEnterprisePartnership}
+                    className="w-full bg-primary text-primary-foreground hover:bg-primary/90 border-0"
+                  >
                     Partenariat Entreprise
                   </Button>
                 </div>
@@ -208,13 +237,17 @@ const Partners = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     Collaboration technique, synergie d'actions, impact multiplié
                   </p>
-                  <Button variant="outline" className="w-full">
+                  <Button 
+                    onClick={handleInstitutionalPartnership}
+                    className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 border-0"
+                  >
                     Partenariat Institutionnel
                   </Button>
                 </div>
               </div>
               
               <Button 
+                onClick={handleContactPartnership}
                 size="lg" 
                 className="hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth"
               >
