@@ -2,11 +2,27 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Users, Sprout, Shield, Building, GraduationCap } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 import healthImage from "@/assets/health-education.jpg";
 import womenImage from "@/assets/women-entrepreneurship.jpg";
 import agricultureImage from "@/assets/agriculture-training.jpg";
+import hivPreventionImage from "@/assets/hiv-prevention.jpg";
+import childrenSupportImage from "@/assets/children-support.jpg";
+import hygieneSanitationImage from "@/assets/hygiene-sanitation.jpg";
+import violencePreventionImage from "@/assets/violence-prevention.jpg";
+import DonationModal from "@/components/DonationModal";
 
 const Projects = () => {
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
+  const { toast } = useToast();
+
+  const handlePartnershipClick = () => {
+    toast({
+      title: "Partenariat",
+      description: "Merci pour votre intérêt ! Contactez-nous à conctactongamdi@gmail.com pour discuter d'un partenariat.",
+    });
+  };
   const strategies = [
     {
       title: "Offre de services de prévention sur les violences basées sur le genre",
@@ -15,7 +31,7 @@ const Projects = () => {
         "Soins et soutien aux survivants des violences basées sur le genre",
         "Sensibilisation sur les violences basées sur le genre"
       ],
-      image: healthImage,
+      image: violencePreventionImage,
       status: "En cours"
     },
     {
@@ -25,7 +41,7 @@ const Projects = () => {
         "Parrainage des OEV",
         "Offre de services de soins et soutien aux OEV"
       ],
-      image: healthImage,
+      image: childrenSupportImage,
       status: "Actif"
     },
     {
@@ -60,7 +76,7 @@ const Projects = () => {
         "Formation et sensibilisation sur l'environnement",
         "Réalisation de latrines ventilées à base communautaire"
       ],
-      image: healthImage,
+      image: hygieneSanitationImage,
       status: "Planifié"
     },
     {
@@ -72,7 +88,7 @@ const Projects = () => {
         "Conseil et dépistage dans la communauté",
         "Organisation de focus groups sur le VIH/Sida"
       ],
-      image: healthImage,
+      image: hivPreventionImage,
       status: "Actif"
     }
   ];
@@ -241,16 +257,28 @@ const Projects = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth">
+              <Button 
+                onClick={() => setIsDonationOpen(true)}
+                className="hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth"
+              >
                 Faire un don
               </Button>
-              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+              <Button 
+                onClick={handlePartnershipClick}
+                variant="outline" 
+                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              >
                 Devenir partenaire
               </Button>
             </div>
           </Card>
         </section>
       </div>
+      
+      <DonationModal 
+        isOpen={isDonationOpen} 
+        onClose={() => setIsDonationOpen(false)} 
+      />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import DonationModal from "@/components/DonationModal";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const Contact = () => {
     message: ""
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -247,7 +249,18 @@ const Contact = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Rejoignez notre équipe et contribuez directement à nos actions sur le terrain
               </p>
-              <Button variant="outline" size="sm">Candidater</Button>
+              <Button 
+                onClick={() => {
+                  toast({
+                    title: "Candidature bénévole",
+                    description: "Merci pour votre intérêt ! Envoyez votre candidature à conctactongamdi@gmail.com"
+                  });
+                }}
+                variant="outline" 
+                size="sm"
+              >
+                Candidater
+              </Button>
             </Card>
             
             <Card className="p-6 text-center card-gradient shadow-card">
@@ -255,7 +268,11 @@ const Contact = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Soutenez financièrement nos projets et aidez-nous à toucher plus de bénéficiaires
               </p>
-              <Button className="hero-gradient text-primary-foreground" size="sm">
+              <Button 
+                onClick={() => setIsDonationOpen(true)}
+                className="hero-gradient text-primary-foreground" 
+                size="sm"
+              >
                 Donner maintenant
               </Button>
             </Card>
@@ -265,11 +282,27 @@ const Contact = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Collaborez avec nous en tant qu'organisation ou entreprise partenaire
               </p>
-              <Button variant="outline" size="sm">En savoir plus</Button>
+              <Button 
+                onClick={() => {
+                  toast({
+                    title: "Partenariat",
+                    description: "Contactez-nous à conctactongamdi@gmail.com pour discuter d'une collaboration."
+                  });
+                }}
+                variant="outline" 
+                size="sm"
+              >
+                En savoir plus
+              </Button>
             </Card>
           </div>
         </section>
       </div>
+      
+      <DonationModal 
+        isOpen={isDonationOpen} 
+        onClose={() => setIsDonationOpen(false)} 
+      />
     </div>
   );
 };
