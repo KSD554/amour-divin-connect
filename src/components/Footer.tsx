@@ -1,7 +1,11 @@
 import { Heart, MapPin, Phone, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import DonationModal from "./DonationModal";
 
 const Footer = () => {
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
+  
   return (
     <footer className="bg-secondary text-secondary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -55,7 +59,7 @@ const Footer = () => {
             <h3 className="font-semibold text-lg">Agir avec nous</h3>
             <ul className="space-y-2 text-sm">
               <li><Link to="/contact" className="hover:text-primary transition-smooth">Devenir bénévole</Link></li>
-              <li><button className="hover:text-primary transition-smooth">Faire un don</button></li>
+              <li><button onClick={() => setIsDonationOpen(true)} className="hover:text-primary transition-smooth">Faire un don</button></li>
               <li><Link to="/projets" className="hover:text-primary transition-smooth">Nos projets</Link></li>
               <li><Link to="/mentions-legales" className="hover:text-primary transition-smooth">Mentions légales</Link></li>
             </ul>
@@ -66,6 +70,11 @@ const Footer = () => {
           <p>&copy; 2024 ONG Amour Divin. Tous droits réservés. | Créée le 28 juillet 2012</p>
         </div>
       </div>
+      
+      <DonationModal 
+        isOpen={isDonationOpen} 
+        onClose={() => setIsDonationOpen(false)} 
+      />
     </footer>
   );
 };

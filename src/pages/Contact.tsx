@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { MapPin, Phone, Mail, Clock, Send, Loader2 } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,21 +13,41 @@ const Contact = () => {
     email: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // Simulation d'envoi (sera remplacé par l'intégration Supabase)
-    console.log("Données du formulaire:", formData);
-    
-    toast({
-      title: "Message envoyé !",
-      description: "Merci pour votre message. Nous vous répondrons bientôt. (Note : Connectez Supabase pour un envoi réel)",
-    });
-    
-    // Réinitialiser le formulaire
-    setFormData({ nom: "", email: "", message: "" });
+    try {
+      const { data, error } = await supabase.functions.invoke('contact-form', {
+        body: { 
+          name: formData.nom, 
+          email: formData.email, 
+          message: formData.message 
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Message envoyé !",
+        description: "Nous vous répondrons dans les plus brefs délais.",
+      });
+      
+      // Réinitialiser le formulaire
+      setFormData({ nom: "", email: "", message: "" });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible d'envoyer le message. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -117,14 +138,14 @@ const Contact = () => {
               </div>
             </Card>
 
-            {/* Information Supabase */}
-            <Card className="p-6 bg-muted border-l-4 border-l-primary">
-              <h3 className="font-semibold text-foreground mb-2">💡 Note Technique</h3>
-              <p className="text-sm text-muted-foreground">
-                Pour que le formulaire de contact fonctionne parfaitement et enregistre 
-                automatiquement les messages dans la base de données, connectez votre 
-                projet à Supabase via l'intégration native Lovable.
-              </p>
+            {/* Information succès */}
+            <Card className="p-6 bg-primary/10 border-primary/20">
+              <h3 className="font-semibold text-primary mb-2">✅ Fonctionnalités Actives</h3>
+              <ul className="text-sm text-primary/80 space-y-1">
+                <li>• Formulaire de contact connecté à Supabase</li>
+                <li>• Module de dons avec Paystack</li>
+                <li>• Chatbot intelligent avec OpenRouter</li>
+              </ul>
             </Card>
           </div>
 
@@ -184,11 +205,21 @@ const Contact = () => {
 
                 <Button 
                   type="submit" 
-                  className="w-full hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth"
+                  disabled={isSubmitting}
+                  className="w-full hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth disabled:opacity-50"
                   size="lg"
                 >
-                  <Send className="w-5 h-5 mr-2" />
-                  Envoyer le message
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Envoi en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5 mr-2" />
+                      Envoyer le message
+                    </>
+                  )}
                 </Button>
               </form>
             </Card>

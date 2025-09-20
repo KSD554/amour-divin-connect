@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,29 +16,58 @@ const Chatbot = () => {
     },
   ]);
   const [currentMessage, setCurrentMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const sendMessage = () => {
-    if (!currentMessage.trim()) return;
+  const sendMessage = async () => {
+    if (!currentMessage.trim() || isLoading) return;
+    
+    const userText = currentMessage;
+    setCurrentMessage("");
+    setIsLoading(true);
     
     // Ajouter le message de l'utilisateur
     const userMessage = {
       id: Date.now(),
-      text: currentMessage,
+      text: userText,
       isBot: false,
     };
     
     setMessages(prev => [...prev, userMessage]);
-    setCurrentMessage("");
     
-    // Réponse automatique simple (sera remplacée par l'API OpenRouter)
-    setTimeout(() => {
+    try {
+      const { data, error } = await supabase.functions.invoke('chatbot', {
+        body: { message: userText }
+      });
+
+      if (error) throw error;
+
       const botResponse = {
         id: Date.now() + 1,
-        text: "Merci pour votre message ! Pour obtenir des réponses détaillées, veuillez connecter l'API OpenRouter dans les paramètres Supabase.",
+        text: data.response || "Désolé, je ne peux pas répondre pour le moment.",
         isBot: true,
       };
+      
       setMessages(prev => [...prev, botResponse]);
-    }, 1000);
+    } catch (error) {
+      console.error('Chatbot error:', error);
+      
+      const errorResponse = {
+        id: Date.now() + 1,
+        text: "Désolé, je rencontre un problème technique. Veuillez nous contacter directement au 08 37 52 99 pour une assistance immédiate.",
+        isBot: true,
+      };
+      
+      setMessages(prev => [...prev, errorResponse]);
+      
+      toast({
+        title: "Erreur",
+        description: "Le chatbot rencontre un problème technique.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -90,10 +121,15 @@ const Chatbot = () => {
               />
               <Button
                 onClick={sendMessage}
+                disabled={isLoading}
                 size="sm"
-                className="hero-gradient text-primary-foreground"
+                className="hero-gradient text-primary-foreground disabled:opacity-50"
               >
-                <Send size={16} />
+                {isLoading ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Send size={16} />
+                )}
               </Button>
             </div>
           </div>

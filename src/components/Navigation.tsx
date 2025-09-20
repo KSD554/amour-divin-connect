@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Heart } from "lucide-react";
+import DonationModal from "./DonationModal";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDonationOpen, setIsDonationOpen] = useState(false);
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -45,7 +47,11 @@ const Navigation = () => {
             ))}
             
             {/* Bouton Don */}
-            <Button variant="default" className="hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth">
+            <Button 
+              onClick={() => setIsDonationOpen(true)}
+              variant="default" 
+              className="hero-gradient text-primary-foreground shadow-soft hover:shadow-hero transition-smooth"
+            >
               Faire un don
             </Button>
           </div>
@@ -75,13 +81,22 @@ const Navigation = () => {
                   {item.label}
                 </Link>
               ))}
-              <Button variant="default" className="hero-gradient text-primary-foreground w-full">
+              <Button 
+                onClick={() => setIsDonationOpen(true)}
+                variant="default" 
+                className="hero-gradient text-primary-foreground w-full"
+              >
                 Faire un don
               </Button>
             </div>
           </div>
         )}
       </div>
+      
+      <DonationModal 
+        isOpen={isDonationOpen} 
+        onClose={() => setIsDonationOpen(false)} 
+      />
     </nav>
   );
 };
