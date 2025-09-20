@@ -155,4 +155,8 @@
   .transition-bounce {
     transition: var(--transition-bounce);
   }
+  
+  .text-primary-glow {
+    color: hsl(var(--primary-glow));
+  }
 }
