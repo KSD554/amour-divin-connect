@@ -13,7 +13,7 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                Ensemble, construisons un monde de <span className="text-primary-glow">dignité</span>
+                Ensemble, construisons un monde de <span className="text-white font-bold">dignité</span>
               </h1>
               <p className="text-xl text-primary-foreground/90 leading-relaxed">
                 Depuis 2012, l'ONG Amour Divin œuvre en Côte d'Ivoire pour lutter contre la pauvreté, 
