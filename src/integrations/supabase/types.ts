@@ -14,7 +14,119 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contact_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      donation_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          donor_id: string | null
+          gateway_response: Json | null
+          id: string
+          paystack_reference: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          donor_id?: string | null
+          gateway_response?: Json | null
+          id?: string
+          paystack_reference?: string | null
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          donor_id?: string | null
+          gateway_response?: Json | null
+          id?: string
+          paystack_reference?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "donation_transactions_donor_id_fkey"
+            columns: ["donor_id"]
+            isOneToOne: false
+            referencedRelation: "donors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      donors: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          email: string
+          id: string
+          name: string
+          payment_method: string
+          phone: string | null
+          status: string
+          transaction_reference: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          email: string
+          id?: string
+          name: string
+          payment_method?: string
+          phone?: string | null
+          status?: string
+          transaction_reference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          email?: string
+          id?: string
+          name?: string
+          payment_method?: string
+          phone?: string | null
+          status?: string
+          transaction_reference?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
