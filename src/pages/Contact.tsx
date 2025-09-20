@@ -138,15 +138,6 @@ const Contact = () => {
               </div>
             </Card>
 
-            {/* Information succès */}
-            <Card className="p-6 bg-primary/10 border-primary/20">
-              <h3 className="font-semibold text-primary mb-2">✅ Fonctionnalités Actives</h3>
-              <ul className="text-sm text-primary/80 space-y-1">
-                <li>• Formulaire de contact connecté à Supabase</li>
-                <li>• Module de dons avec Paystack</li>
-                <li>• Chatbot intelligent avec OpenRouter</li>
-              </ul>
-            </Card>
           </div>
 
           {/* Formulaire de contact */}
